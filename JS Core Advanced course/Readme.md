@@ -1,18 +1,24 @@
 # JavaScript Core (Advanced)
 Конспектик_))))
 ## 1. Use Strict
+# JavaScript Core (Advanced)
+
+## 1. Use Strict
 
 `'use strict'` - строгий режим выполнения JavaScript:
-- Располагается в начале скрипта/функции
-- Нельзя отключить после включения
-- Выбрасывает ошибки на небезопасные конструкции
-- Запрещает использование переменных без объявления
-- Запрещает параметры функции с одинаковыми именами
-- Меняет поведение `this`
-- Ограничивает использование зарезервированных слов
-- **Предотвращает автоматическое создание глобальных переменных при присваивании**
-- **В модулях ES6 (`import`/`export`) режим strict включен по умолчанию**
-- **`this` в функциях без явного контекста равен `undefined`, а не глобальному объекту**
+
+| Особенность | Описание |
+|-------------|----------|
+| Расположение | В начале скрипта/функции |
+| Включение | Нельзя отключить после включения |
+| Ошибки | Выбрасывает ошибки на небезопасные конструкции |
+| Переменные | Запрещает использование переменных без объявления |
+| Параметры | Запрещает параметры функции с одинаковыми именами |
+| This | Меняет поведение `this` |
+| Зарезервированные слова | Ограничивает использование |
+| Глобальные переменные | **Предотвращает автоматическое создание при присваивании** |
+| ES6 модули | **Режим strict включен по умолчанию** |
+| This в функциях | **Равен `undefined`, а не глобальному объекту** |
 
 ```javascript
 'use strict';
@@ -49,10 +55,17 @@ const constVariable = 5; // обязательно со значением
 - Цифры
 - Символы $ и _
 
-### Особенности var
-- Функциональная область видимости
-- Hoisting ("всплытие") - можно обращаться до объявления
-- Становятся свойствами глобального объекта
+### Сравнение var, let и const
+
+| Характеристика | var | let | const |
+|----------------|-----|-----|-------|
+| Область видимости | Функциональная | Блочная | Блочная |
+| Hoisting (всплытие) | Да | Нет (TDZ) | Нет (TDZ) |
+| Свойство глобального объекта | Да | Нет | Нет |
+| Переопределение | Разрешено | Разрешено | Запрещено |
+| Объявление без инициализации | Разрешено | Разрешено | Запрещено |
+| Изменение свойств объекта | - | - | **Разрешено** |
+| Рекомендуется использовать | Редко | Для изменяемых | **По умолчанию** |
 
 ```javascript
 // Hoisting
@@ -60,28 +73,17 @@ console.log(a); // undefined
 var a = 5;
 console.log(a); // 5
 
-// Функциональная область видимости
+// Функциональная vs блочная область видимости
 if (true) {
   var a = 5;
+  let b = 10;
+  const c = 15;
 }
 console.log(a); // 5
-
-function foo() {
-  var b = 10;
-}
 console.log(b); // ReferenceError: b is not defined
-```
+console.log(c); // ReferenceError: c is not defined
 
-### Особенности let и const
-- Блочная область видимости
-- Нельзя обращаться до объявления (Temporal Dead Zone)
-- Не становятся свойствами глобального объекта
-- `const` нельзя объявлять без значения
-- **`const` запрещает переприсваивание, но не запрещает изменение свойств объектов и элементов массивов**
-- **Рекомендуется использовать `const` по умолчанию, переходить к `let` только когда переменная должна изменяться**
-
-```javascript
-// Temporal Dead Zone (TDZ) подробнее
+// Temporal Dead Zone (TDZ)
 {
   // Начало TDZ для x
   console.log(x); // ReferenceError: Cannot access 'x' before initialization
@@ -99,20 +101,20 @@ user = { name: 'Max' }; // TypeError: Assignment to constant variable
 
 ### Примитивные типы
 
-#### Undefined
-```javascript
-let name;
-console.log(name); // undefined
-```
+| Тип | Описание | Пример |
+|-----|----------|--------|
+| Undefined | Отсутствие значения | `let a;` (a === undefined) |
+| Boolean | Логический | `true`, `false` |
+| Number | Числовой | `42`, `3.14`, `NaN`, `Infinity` |
+| String | Строковый | `"Привет"`, `'Мир'`, `` `Шаблон ${var}` `` |
+| BigInt | Большие целые числа | `9007199254740991n` |
+| Symbol | Уникальные идентификаторы | `Symbol('id')` |
+| Null | Отсутствие объекта | `null` |
 
-#### Boolean
-```javascript
-const truthyValue = true;
-const falsyValue = false;
-const boolFromValue = Boolean(1); // true
-```
+### Операции с примитивными типами
 
 #### Number
+
 ```javascript
 const int = 4;
 const decimal = 0.101;
@@ -121,13 +123,13 @@ const octal = 0o77; // 63
 const hexadecimal = 0xFF; // 255
 
 // Специальные значения
-const inf = Infinity; // бесконечность
-const negInf = -Infinity; // отрицательная бесконечность
-const notANumber = NaN; // не число
+const inf = Infinity;
+const negInf = -Infinity;
+const notANumber = NaN;
 
 // Проверка NaN
-console.log(isNaN(notANumber)); // true
-console.log(Number.isNaN(notANumber)); // true (более строгая проверка)
+isNaN(notANumber); // true
+Number.isNaN(notANumber); // true (более строгая проверка)
 
 // Преобразование строк в числа
 parseInt('123'); // 123
@@ -138,6 +140,7 @@ Number('123abc'); // NaN (строгое преобразование)
 ```
 
 #### String
+
 ```javascript
 const double = "Добрый день!";
 const single = 'Добрый день';
@@ -150,28 +153,25 @@ const multiline = `
   Вторая строка
   Третья строка
 `;
-
-// Методы строк
-const str = 'JavaScript';
-str.length; // 10
-str.toUpperCase(); // 'JAVASCRIPT'
-str.toLowerCase(); // 'javascript'
-str.indexOf('Script'); // 4
-str.includes('Java'); // true
-str.startsWith('Java'); // true
-str.endsWith('pt'); // true
-str.slice(0, 4); // 'Java'
-str.substring(4, 10); // 'Script'
-str.split(''); // ['J', 'a', 'v', 'a', 'S', 'c', 'r', 'i', 'p', 't']
 ```
 
-#### BigInt
-```javascript
-const biggy = 9997000254740991n;
-const alsoBig = BigInt(9997000254999999);
-```
+##### Основные методы строк
+
+| Метод | Описание | Пример |
+|-------|----------|--------|
+| length | Длина строки | `"JavaScript".length` → 10 |
+| toUpperCase() | Верхний регистр | `"JavaScript".toUpperCase()` → "JAVASCRIPT" |
+| toLowerCase() | Нижний регистр | `"JavaScript".toLowerCase()` → "javascript" |
+| indexOf() | Позиция подстроки | `"JavaScript".indexOf("Script")` → 4 |
+| includes() | Наличие подстроки | `"JavaScript".includes("Java")` → true |
+| startsWith() | Начинается с | `"JavaScript".startsWith("Java")` → true |
+| endsWith() | Заканчивается на | `"JavaScript".endsWith("pt")` → true |
+| slice() | Извлечение части | `"JavaScript".slice(0, 4)` → "Java" |
+| substring() | Извлечение части | `"JavaScript".substring(4, 10)` → "Script" |
+| split() | Разделение на массив | `"JavaScript".split("")` → ['J','a','v','a','S',...] |
 
 #### Symbol
+
 ```javascript
 const sym = Symbol();
 const symTwo = Symbol();
@@ -187,14 +187,8 @@ const obj = {
 };
 ```
 
-#### Null
-```javascript
-const nullValue = null; // намеренное отсутствие значения объекта
-```
+### Ссылочный тип: Object
 
-### Ссылочный тип
-
-#### Object
 ```javascript
 const cat = {}; // литеральная запись
 const book = new Object({ title: 'Война и мир', author: 'Лев Толстой' });
@@ -206,14 +200,18 @@ book["author"]; // 'Лев Толстой'
 // Операции
 delete book.title; // удаление свойства
 "title" in book; // проверка существования свойства
-for (let key in book) { /* перебор свойств */ }
-
-// Методы Object
-Object.keys(book); // ['author']
-Object.values(book); // ['Лев Толстой']
-Object.entries(book); // [['author', 'Лев Толстой']]
-Object.assign({}, book, { year: 1869 }); // { author: 'Лев Толстой', year: 1869 }
 ```
+
+#### Статические методы Object
+
+| Метод | Описание | Пример |
+|-------|----------|--------|
+| keys() | Массив ключей | `Object.keys({a:1, b:2})` → ['a', 'b'] |
+| values() | Массив значений | `Object.values({a:1, b:2})` → [1, 2] |
+| entries() | Массив пар | `Object.entries({a:1, b:2})` → [['a',1], ['b',2]] |
+| assign() | Копирование свойств | `Object.assign({}, {a:1}, {b:2})` → {a:1, b:2} |
+| freeze() | Запрет изменений | `Object.freeze(obj)` - защита от изменений |
+| is() | Строгое сравнение | `Object.is(NaN, NaN)` → true |
 
 ## 4. Массивы
 
@@ -224,52 +222,58 @@ let arr2 = new Array(item1, item2); // редко используется
 
 // Длина массива
 arr.length
+```
 
-// Основные методы
-arr.push(item); // добавить в конец
-arr.pop(); // удалить с конца
-arr.shift(); // удалить с начала
-arr.unshift(item); // добавить в начало
+### Основные методы массивов
 
-// Дополнительные методы
-arr.slice(1, 3); // возвращает новый массив, содержащий копию части исходного
-arr.splice(1, 2, 'new'); // изменяет исходный массив (удаляет/заменяет/добавляет элементы)
-arr.concat([3, 4]); // объединяет массивы
-arr.join('-'); // объединяет элементы в строку с указанным разделителем
-arr.reverse(); // меняет порядок элементов на обратный
-arr.sort(); // сортирует массив (по умолчанию как строки)
-arr.indexOf(item); // ищет индекс элемента
-arr.includes(item); // проверяет наличие элемента
+| Категория | Метод | Описание | Изменяет исходный? |
+|-----------|-------|----------|-------------------|
+| **Базовые** | push() | Добавление в конец | Да |
+| | pop() | Удаление с конца | Да |
+| | shift() | Удаление с начала | Да |
+| | unshift() | Добавление в начало | Да |
+| **Работа с частями** | slice() | Извлечение части | Нет |
+| | splice() | Удаление/добавление элементов | Да |
+| | concat() | Объединение массивов | Нет |
+| **Поиск** | indexOf() | Поиск индекса элемента | Нет |
+| | includes() | Проверка наличия элемента | Нет |
+| | find() | Поиск по условию | Нет |
+| | findIndex() | Поиск индекса по условию | Нет |
+| **Преобразование** | join() | Объединение в строку | Нет |
+| | reverse() | Обращение порядка | Да |
+| | sort() | Сортировка | Да |
+| **Итерация** | forEach() | Перебор элементов | Нет |
+| | map() | Преобразование элементов | Нет |
+| | filter() | Фильтрация | Нет |
+| | reduce() | Свёртка в одно значение | Нет |
+| | some() | Проверка наличия по условию | Нет |
+| | every() | Проверка всех элементов | Нет |
 
-// Методы для перебора
+```javascript
+// Примеры итераций
 arr.forEach((item, index, array) => {
   // выполняет функцию для каждого элемента
 });
 
-arr.map((item, index, array) => {
-  // создает новый массив из результатов вызова функции для каждого элемента
+const doubled = arr.map((item, index, array) => {
+  // преобразует каждый элемент
   return item * 2;
 });
 
-arr.filter((item, index, array) => {
+const filtered = arr.filter((item, index, array) => {
   // создает массив из элементов, прошедших проверку
   return item > 10;
 });
 
-arr.reduce((accumulator, item, index, array) => {
+const sum = arr.reduce((accumulator, item, index, array) => {
   // свертка массива в одно значение
   return accumulator + item;
 }, initialValue);
+```
 
-arr.find(item => item > 10); // находит первый элемент, удовлетворяющий условию
-arr.findIndex(item => item > 10); // находит индекс первого элемента, удовлетворяющего условию
-arr.some(item => item > 10); // проверяет, удовлетворяет ли хотя бы один элемент условию
-arr.every(item => item > 10); // проверяет, удовлетворяют ли все элементы условию
+### Деструктуризация и спред-оператор
 
-// Перебор элементов
-for (let i = 0; i < arr.length; i++) { /* ... */ }
-for (let item of arr) { /* ... */ }
-
+```javascript
 // Деструктуризация массивов
 const [first, second] = [1, 2]; // first = 1, second = 2
 const [head, ...tail] = [1, 2, 3, 4]; // head = 1, tail = [2, 3, 4]
@@ -281,41 +285,42 @@ const copy = [...arr]; // создание копии массива
 
 ## 5. Функции
 
-### Function Declaration
+### Способы объявления функций
+
+| Способ | Пример | Описание | Hoisting |
+|--------|--------|----------|----------|
+| Function Declaration | `function greet() {}` | Стандартное объявление | Да |
+| Function Expression | `const greet = function() {};` | Функциональное выражение | Нет |
+| Arrow Function | `const greet = () => {};` | Стрелочная функция | Нет |
+| IIFE | `(function() {})();` | Немедленно вызываемая | - |
+| Генератор | `function* generate() {}` | Функция-генератор | Да |
+| Метод объекта | `const obj = { method() {} };` | Метод объекта | - |
+
 ```javascript
+// Function Declaration
 function greet(name) {
   return "Привет, " + name + "!";
 }
-```
-Можно вызвать до объявления в коде.
 
-### Function Expression
-```javascript
+// Function Expression
 const greet = function(name) {
   return "Привет, " + name + "!";
 };
-```
-Можно вызвать только после объявления.
 
-### Стрелочная функция
-```javascript
+// Стрелочная функция
 const greet = (name) => {
   return "Привет, " + name + "!";
 };
 
-// Сокращенная запись
+// Сокращенная запись стрелочной функции
 const greet = name => "Привет, " + name + "!";
-```
 
-### IIFE (Immediately Invoked Function Expression)
-```javascript
+// IIFE (Immediately Invoked Function Expression)
 (function() {
   // код
 })();
-```
 
-### Генераторы
-```javascript
+// Генераторы
 function* generateSequence() {
   yield 1;
   yield 2;
@@ -327,6 +332,7 @@ console.log(gen.next()); // { value: 1, done: false }
 ```
 
 ### Параметры функций
+
 ```javascript
 // Параметры по умолчанию
 function greet(name = 'Гость', greeting = 'Привет') {
@@ -341,7 +347,14 @@ function sum(...numbers) {
 sum(1, 2, 3, 4, 5); // 15
 ```
 
-### Методы привязки контекста
+### Контекст и this
+
+| Метод | Синтаксис | Описание |
+|-------|-----------|----------|
+| call | `func.call(context, arg1, arg2)` | Вызов с заданным this и аргументами |
+| apply | `func.apply(context, [arg1, arg2])` | Вызов с this и аргументами в массиве |
+| bind | `const bound = func.bind(context)` | Создаёт новую функцию с привязанным this |
+
 ```javascript
 const person = {
   name: 'John',
@@ -362,6 +375,7 @@ boundFunc(); // "Привет, я Charlie"
 ```
 
 ### Замыкания
+
 ```javascript
 // Пример замыкания - функция, которая запоминает своё лексическое окружение
 function createCounter() {
@@ -375,40 +389,18 @@ function createCounter() {
 const counter = createCounter();
 counter(); // 1
 counter(); // 2
-
-// Практическое применение: создание приватных переменных
-function createUser(name) {
-  // Приватная переменная
-  let secretId = Math.random().toString(36).substr(2, 9);
-  
-  return {
-    getName() {
-      return name;
-    },
-    validateId(id) {
-      return id === secretId;
-    }
-  };
-}
-
-const user = createUser('John');
-console.log(user.getName()); // "John"
-console.log(user.secretId); // undefined (приватная переменная)
 ```
 
 ### Продвинутые концепции
-- Рекурсия - функция вызывает сама себя
-- Замыкание - функция + доступ к переменным из внешнего лексического окружения
-- **Карринг (currying) - трансформация функции от многих аргументов в набор функций от одного аргумента**
-- **Функции высшего порядка - функции, которые принимают другие функции в качестве аргументов или возвращают их**
+
+| Концепция | Описание | Пример |
+|-----------|----------|--------|
+| Рекурсия | Функция вызывает сама себя | Факториал, обход дерева |
+| Замыкание | Функция + доступ к внешним переменным | Счетчики, приватные переменные |
+| Карринг | Преобразование многоаргументной функции в набор одноаргументных | `add(1)(2)(3)` вместо `add(1,2,3)` |
+| Функции высшего порядка | Функции как аргументы/результаты | map, filter, reduce |
 
 ```javascript
-// Пример рекурсии: факториал
-function factorial(n) {
-  if (n <= 1) return 1;
-  return n * factorial(n - 1);
-}
-
 // Пример карринга
 function curry(fn) {
   return function curried(...args) {
@@ -448,9 +440,23 @@ class Person {
 const person1 = new Person("Иван", 20);
 ```
 
-### Наследование
+### Особенности и функциональность классов
+
+| Функциональность | Синтаксис | Описание |
+|------------------|-----------|----------|
+| Наследование | `class Child extends Parent {}` | Расширение базового класса |
+| Приватные поля | `#privateField` | Доступны только внутри класса |
+| Приватные методы | `#privateMethod() {}` | Доступны только внутри класса |
+| Геттеры | `get property() {}` | Вызываются при обращении к свойству |
+| Сеттеры | `set property(value) {}` | Вызываются при присваивании |
+| Статические методы | `static method() {}` | Вызываются на самом классе |
+| Статические поля | `static field = value` | Принадлежат самому классу |
+
 ```javascript
 class Student extends Person {
+  #grades = [];
+  static schoolName = "Школа №1";
+  
   constructor(name, age, grade) {
     super(name, age);
     this.grade = grade;
@@ -459,31 +465,31 @@ class Student extends Person {
   study() {
     return `${this.name} учится в ${this.grade} классе.`;
   }
-}
-```
-
-### Приватные свойства и методы
-```javascript
-class MyClass {
-  #privateProperty = 10; // приватное свойство
   
-  constructor() {
-    this.publicProperty = 20; // публичное свойство
+  addGrade(grade) {
+    this.#grades.push(grade);
   }
   
-  #privateMethod() { /* ... */ }
-  publicMethod() { /* ... */ }
-
-  // Использование Symbol для приватных свойств (до ES2022)
-  #symbolPrivate = Symbol('private');
-
-  constructor() {
-    this[this.#symbolPrivate] = 'private value';
+  #calculateAverage() {
+    return this.#grades.reduce((sum, grade) => sum + grade, 0) / this.#grades.length;
+  }
+  
+  get averageGrade() {
+    return this.#calculateAverage();
+  }
+  
+  set fullName(value) {
+    [this.firstName, this.lastName] = value.split(' ');
+  }
+  
+  static getSchoolInfo() {
+    return `Это ${Student.schoolName}`;
   }
 }
 ```
 
 ### Геттеры и сеттеры
+
 ```javascript
 class User {
   #name = '';
@@ -518,24 +524,10 @@ class User {
     this.#age = value;
   }
 }
-
-const user = new User('John', 30);
-console.log(user.name); // вызывает геттер
-user.name = 'Alice'; // вызывает сеттер
-```
-
-### Статические методы
-```javascript
-class MathHelper {
-  static add(a, b) {
-    return a + b;
-  }
-}
-
-MathHelper.add(5, 3); // 8
 ```
 
 ### Альтернативы классам
+
 ```javascript
 // Object.create() для наследования
 const personProto = {
@@ -555,28 +547,13 @@ const speakerMixin = {
   }
 };
 
-const swimmerMixin = {
-  swim() {
-    console.log(`${this.name} плавает`);
-  }
-};
-
 // Применение миксинов к классу
-class Person {
-  constructor(name) {
-    this.name = name;
-  }
-}
-
-// Добавление функциональности миксинов к прототипу класса
-Object.assign(Person.prototype, speakerMixin, swimmerMixin);
-
-const john = new Person('John');
-john.say('Привет!'); // "John говорит: Привет!"
-john.swim(); // "John плавает"
+Object.assign(Person.prototype, speakerMixin);
 ```
 
 ## 7. Обработка ошибок
+
+### Основные конструкции
 
 ```javascript
 try {
@@ -592,18 +569,19 @@ throw new Error("Сообщение об ошибке");
 ```
 
 ### Типы ошибок
-```javascript
-// Встроенные типы ошибок
-new Error('Общая ошибка');
-new SyntaxError('Ошибка синтаксиса');
-new TypeError('Ошибка типа');
-new ReferenceError('Ошибка ссылки на несуществующую переменную');
-new RangeError('Значение вне допустимого диапазона');
-new URIError('Ошибка в кодировании/декодировании URI');
-new EvalError('Ошибка в eval()');
-```
+
+| Тип ошибки | Описание | Пример случая |
+|------------|----------|---------------|
+| Error | Базовый тип | Общие ошибки |
+| SyntaxError | Ошибка синтаксиса | Некорректный код |
+| TypeError | Ошибка типа | Вызов метода не у того типа |
+| ReferenceError | Ошибка ссылки | Доступ к несуществующей переменной |
+| RangeError | Ошибка диапазона | Значение вне допустимого диапазона |
+| URIError | Ошибка в URI | Некорректный URI |
+| EvalError | Ошибка eval() | Проблемы с функцией eval() |
 
 ### Пользовательские ошибки
+
 ```javascript
 // Создание собственного класса ошибок
 class ValidationError extends Error {
@@ -636,27 +614,9 @@ try {
 }
 ```
 
-### try...catch в асинхронном коде
+### Обработка ошибок в асинхронном коде
+
 ```javascript
-// try...catch с колбэками не работает
-setTimeout(() => {
-  try {
-    // Этот try...catch перехватит ошибку
-    noSuchFunction();
-  } catch (e) {
-    console.log('Ошибка перехвачена в setTimeout', e);
-  }
-}, 1000);
-
-try {
-  // Этот try...catch НЕ перехватит ошибку из setTimeout
-  setTimeout(() => {
-    noSuchFunction();
-  }, 1000);
-} catch (e) {
-  console.log('Эта строка никогда не выполнится');
-}
-
 // try...catch с промисами и async/await
 async function fetchData() {
   try {
@@ -668,11 +628,8 @@ async function fetchData() {
     throw error; // Пробрасываем ошибку дальше
   }
 }
-```
 
-### Обработка ошибок в промисах
-```javascript
-// Вариант 1: через .catch()
+// Через .catch() с промисами
 fetchData()
   .then(data => {
     // обработка успешного результата
@@ -680,34 +637,17 @@ fetchData()
   .catch(error => {
     // обработка ошибки
   });
-
-// Вариант 2: через второй аргумент .then()
-fetchData()
-  .then(
-    data => {
-      // обработка успешного результата
-    },
-    error => {
-      // обработка ошибки
-    }
-  );
 ```
 
 ## 8. Promise (Промисы)
 
-Promise (промис) - это специальный объект JavaScript, который связывает "создающий" и "потребляющий" коды для асинхронных операций.
-
-### Основные понятия
-
-- **Promise** – объект, представляющий результат асинхронной операции
-- **Executor** – функция с аргументами `resolve` и `reject`, запускается автоматически при создании промиса
-
 ### Состояния промиса
 
-Промис всегда находится в одном из трёх состояний:
-- **pending** – начальное состояние (ожидание)
-- **fulfilled** – операция завершилась успешно с результатом (`value`)
-- **rejected** – операция завершилась с ошибкой (`error`)
+| Состояние | Описание |
+|-----------|----------|
+| pending | Начальное состояние (ожидание) |
+| fulfilled | Операция успешна с результатом |
+| rejected | Операция завершилась с ошибкой |
 
 ```javascript
 // Создание промиса
@@ -725,16 +665,13 @@ const promise = new Promise(function(resolve, reject) {
 
 ### Методы промисов
 
-#### Обработка результата
+| Метод | Описание |
+|-------|----------|
+| then() | Обработка успешного результата |
+| catch() | Обработка ошибки |
+| finally() | Выполняется всегда |
 
 ```javascript
-promise
-  .then(
-    function(result) { /* обработка успешного результата */ },
-    function(error) { /* обработка ошибки */ }  // необязательный аргумент
-  );
-
-// Более читаемый подход с цепочкой
 promise
   .then(function(result) {
     // обработка успешного результата
@@ -743,93 +680,41 @@ promise
   .catch(function(error) {
     // обработка ошибки
     console.error('Произошла ошибка:', error);
-    
-    // Можно обработать ошибку и продолжить цепочку
     return fallbackValue;
-    
-    // Или пробросить ошибку дальше
-    // throw error;
   })
   .finally(function() {
     // выполняется всегда, независимо от результата
-    // здесь обычно освобождают ресурсы, закрывают соединения и т.д.
-    // не принимает аргументов и не влияет на цепочку
-  });
-```
-
-#### Цепочки промисов
-
-```javascript
-fetchData()
-  .then(data => {
-    return processData(data); // возвращает промис
-  })
-  .then(processedData => {
-    return saveData(processedData); // возвращает промис
-  })
-  .then(saveResult => {
-    console.log('Данные сохранены:', saveResult);
-  })
-  .catch(error => {
-    // перехватывает ошибки на любом этапе цепочки
-    console.error('Произошла ошибка в цепочке:', error);
   });
 ```
 
 ### Статические методы Promise
 
-#### Promise.all()
-
-Ожидает выполнения всех промисов и возвращает массив с их результатами. Если хотя бы один промис завершается с ошибкой, весь Promise.all отклоняется с этой ошибкой.
+| Метод | Описание | Результат |
+|-------|----------|-----------|
+| Promise.all(iterable) | Ожидает все промисы | Успех: массив результатов<br>Ошибка: первая ошибка |
+| Promise.allSettled(iterable) | Ожидает завершения всех | Массив объектов с результатами/ошибками |
+| Promise.race(iterable) | Возвращает первый завершившийся | Результат самого быстрого промиса |
+| Promise.any(iterable) | Возвращает первый успешный | Первый успешный результат или AggregateError |
+| Promise.resolve(value) | Создаёт выполненный промис | Промис с результатом value |
+| Promise.reject(error) | Создаёт отклонённый промис | Промис с ошибкой error |
 
 ```javascript
-const promises = [
-  fetch('/api/users'),
-  fetch('/api/posts'),
-  fetch('/api/comments')
-];
+// Promise.all
+const promises = [fetch('/api/users'), fetch('/api/posts'), fetch('/api/comments')];
 
 Promise.all(promises)
-  .then(responses => {
-    // массив всех ответов
-    return Promise.all(responses.map(response => response.json()));
-  })
+  .then(responses => Promise.all(responses.map(response => response.json())))
   .then(data => {
-    // массив данных из всех запросов
     const [users, posts, comments] = data;
     console.log('Пользователи:', users);
     console.log('Посты:', posts);
     console.log('Комментарии:', comments);
   })
   .catch(error => {
-    // если хотя бы один запрос завершится ошибкой
     console.error('Произошла ошибка:', error);
   });
-```
 
-#### Promise.allSettled()
-
-Ждёт завершения всех промисов (успешно или с ошибкой) и возвращает массив объектов с информацией о результате каждого промиса.
-
-```javascript
-Promise.allSettled(promises)
-  .then(results => {
-    results.forEach((result, index) => {
-      if (result.status === 'fulfilled') {
-        console.log(`Промис ${index} выполнен:`, result.value);
-      } else {
-        console.log(`Промис ${index} отклонен:`, result.reason);
-      }
-    });
-  });
-```
-
-#### Promise.race()
-
-Возвращает результат или ошибку самого быстрого промиса из массива.
-
-```javascript
-// Пример с таймаутом для запроса
+// Promise.race - таймаут для запроса
 const fetchWithTimeout = (url, timeout = 5000) => {
   return Promise.race([
     fetch(url),
@@ -838,71 +723,9 @@ const fetchWithTimeout = (url, timeout = 5000) => {
     )
   ]);
 };
-
-fetchWithTimeout('/api/data', 3000)
-  .then(response => response.json())
-  .then(data => console.log('Данные получены:', data))
-  .catch(error => console.error('Ошибка:', error));
-```
-
-#### Promise.any()
-
-Возвращает результат первого успешно выполненного промиса. Если все промисы отклонены, возвращает ошибку `AggregateError`.
-
-```javascript
-const mirrors = [
-  'https://mirror1.example.com/file.zip',
-  'https://mirror2.example.com/file.zip',
-  'https://mirror3.example.com/file.zip'
-];
-
-Promise.any(mirrors.map(url => fetch(url)))
-  .then(firstResponse => {
-    console.log('Загрузка файла с первого доступного зеркала');
-    return firstResponse.blob();
-  })
-  .catch(error => {
-    // AggregateError содержит массив всех ошибок
-    console.error('Все зеркала недоступны:', error.errors);
-  });
-```
-
-#### Promise.resolve() и Promise.reject()
-
-Создают уже выполненные (или отклоненные) промисы.
-
-```javascript
-// Кеширование данных
-const cache = new Map();
-
-function fetchData(url) {
-  if (cache.has(url)) {
-    return Promise.resolve(cache.get(url)); // мгновенно возвращает значение из кеша как промис
-  }
-  
-  return fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      cache.set(url, data);
-      return data;
-    });
-}
-
-// Отклонение при некорректных данных
-function validateInput(data) {
-  if (!data || typeof data !== 'object') {
-    return Promise.reject(new Error('Некорректные входные данные'));
-  }
-  
-  return Promise.resolve(data);
-}
 ```
 
 ## 9. Async/Await
-
-Async/await - это синтаксический сахар для работы с промисами, делающий асинхронный код более читаемым и похожим на синхронный.
-
-### Основы async/await
 
 ```javascript
 // Функция с ключевым словом async всегда возвращает промис
@@ -911,7 +734,6 @@ async function fetchUserData(userId) {
     // await приостанавливает выполнение функции до разрешения промиса
     const response = await fetch(`/api/users/${userId}`);
     
-    // Если промис отклонен, генерируется исключение
     if (!response.ok) {
       throw new Error(`HTTP ошибка! Статус: ${response.status}`);
     }
@@ -919,21 +741,21 @@ async function fetchUserData(userId) {
     const userData = await response.json();
     return userData; // автоматически оборачивается в Promise.resolve()
   } catch (error) {
-    // Перехват ошибок, возникших при ожидании промисов
     console.error('Ошибка при загрузке данных пользователя:', error);
     throw error; // проброс ошибки дальше (Promise.reject())
   }
 }
-
-// Использование асинхронной функции
-fetchUserData(123)
-  .then(userData => {
-    console.log('Данные пользователя:', userData);
-  })
-  .catch(error => {
-    console.error('Не удалось получить данные пользователя:', error);
-  });
 ```
+
+### Сравнение: промисы vs async/await
+
+| Аспект | Промисы | Async/Await |
+|--------|---------|-------------|
+| Синтаксис | Цепочки .then() | Похож на синхронный |
+| Обработка ошибок | .catch() | try...catch |
+| Читаемость | Хуже при вложенности | Лучше для сложной логики |
+| Отладка | Труднее отслеживать стек | Проще отлаживать |
+| Внутри циклов | Сложнее организовать | Проще управлять потоком |
 
 ### Параллельное выполнение с async/await
 
@@ -941,13 +763,10 @@ fetchUserData(123)
 async function fetchAllData() {
   try {
     // Запускаем запросы параллельно
-    const userPromise = fetch('/api/users').then(r => r.json());
-    const postsPromise = fetch('/api/posts').then(r => r.json());
-    const commentsPromise = fetch('/api/comments').then(r => r.json());
-    
-    // Ждем выполнения всех промисов
     const [users, posts, comments] = await Promise.all([
-      userPromise, postsPromise, commentsPromise
+      fetch('/api/users').then(r => r.json()),
+      fetch('/api/posts').then(r => r.json()),
+      fetch('/api/comments').then(r => r.json())
     ]);
     
     return { users, posts, comments };
@@ -958,36 +777,7 @@ async function fetchAllData() {
 }
 ```
 
-### Особенности async/await
-
-#### Обработка ошибок
-
-```javascript
-// Сравнение обработки ошибок с промисами и async/await
-
-// Промисы с цепочкой then/catch
-fetchData()
-  .then(data => processData(data))
-  .then(processed => {
-    console.log('Обработано:', processed);
-  })
-  .catch(error => {
-    console.error('Произошла ошибка:', error);
-  });
-
-// Тот же код с async/await
-async function fetchAndProcess() {
-  try {
-    const data = await fetchData();
-    const processed = await processData(data);
-    console.log('Обработано:', processed);
-  } catch (error) {
-    console.error('Произошла ошибка:', error);
-  }
-}
-```
-
-#### Циклы и итерации
+### Последовательное vs параллельное выполнение
 
 ```javascript
 // Последовательная обработка массива с async/await
@@ -1012,66 +802,6 @@ async function processItemsParallel(items) {
   return await Promise.all(promises);
 }
 ```
-
-#### Асинхронный IIFE (Immediately Invoked Function Expression)
-
-```javascript
-// Для использования await на верхнем уровне можно использовать асинхронный IIFE
-(async function() {
-  try {
-    const data = await fetchData();
-    console.log('Данные:', data);
-  } catch (error) {
-    console.error('Ошибка:', error);
-  }
-})();
-```
-
-### Лучшие практики async/await
-
-1. **Всегда используйте try/catch**
-   ```javascript
-   async function fetchData() {
-     try {
-       return await fetch('/api/data').then(r => r.json());
-     } catch (error) {
-       console.error('Ошибка загрузки:', error);
-       // Возможно вернуть запасные данные или повторить запрос
-       return { fallback: true };
-     }
-   }
-   ```
-
-2. **Избегайте блокирования без необходимости**
-   ```javascript
-   // Плохо: последовательные запросы, когда можно параллельные
-   async function getDataSequential() {
-     const users = await fetchUsers();
-     const posts = await fetchPosts(); // ждет завершения fetchUsers
-     return { users, posts };
-   }
-   
-   // Хорошо: параллельные запросы, когда они независимы
-   async function getDataParallel() {
-     const [users, posts] = await Promise.all([
-       fetchUsers(),
-       fetchPosts()
-     ]);
-     return { users, posts };
-   }
-   ```
-
-3. **Смешивание с промисами при необходимости**
-   ```javascript
-   async function processWithTimeout(data, timeoutMs = 5000) {
-     return Promise.race([
-       processData(data),
-       new Promise((_, reject) => 
-         setTimeout(() => reject(new Error('Timeout')), timeoutMs)
-       )
-     ]);
-   }
-   ```
 
 ## 10. Event Loop (Цикл событий)
 
