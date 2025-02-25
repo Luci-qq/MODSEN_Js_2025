@@ -1,9 +1,6 @@
 # JavaScript Core (Advanced)
 Конспектик_))))
 ## 1. Use Strict
-# JavaScript Core (Advanced)
-
-## 1. Use Strict
 
 `'use strict'` - строгий режим выполнения JavaScript:
 
