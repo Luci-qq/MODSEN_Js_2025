@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Counter</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        #root {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #eee;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function Counter() {
+            const [count, setCount] = React.useState(0);
+
+            const increment = () => {
+                setCount(prevCount => prevCount + 1);
+            };
+
+            return (
+                <div>
+                    <h2>Текущее значение: {count}</h2>
+                    <button 
+                        onClick={increment}
+                        style={{
+                            backgroundColor: count > 10 ? 'red' : 'green',
+                            color: 'white',
+                            padding: '10px 20px',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Увеличить
+                    </button>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<Counter />, document.getElementById('root'));
+    </script>
+</body>
+</html>

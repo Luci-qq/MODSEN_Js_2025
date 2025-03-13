@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Photo List</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        .photo-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            width: 150px;
+            text-align: center;
+        }
+        .photo-item img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const photos = [
+            {
+                albumid: 1,
+                id: 1,
+                title: "green",
+                url: "https://via.placeholder.com/600/92c952",
+                thumbnailurl: "https://via.placeholder.com/150/92c952"
+            },
+            {
+                albumid: 1,
+                id: 2,
+                title: "purple",
+                url: "https://via.placeholder.com/600/771796",
+                thumbnailurl: "https://via.placeholder.com/150/771796"
+            }
+        ];
+
+        function PhotoItem(props) {
+            return (
+                <div className="photo-item">
+                    <img src={props.thumbnailurl} alt={props.title} />
+                    <p>{props.title}</p>
+                </div>
+            );
+        }
+
+        function PhotoList() {
+            return (
+                <div>
+                    {photos.map(photo => (
+                        <PhotoItem key={photo.id} {...photo} />
+                    ))}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<PhotoList />, document.getElementById('root'));
+    </script>
+</body>
+</html>

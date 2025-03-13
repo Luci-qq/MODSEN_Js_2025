@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Example</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        #root {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #eee;
+            max-width: 400px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function FormComponent() {
+            const [inputValue, setInputValue] = React.useState('');
+
+            const handleInputChange = (event) => {
+                setInputValue(event.target.value);
+            };
+
+            const handleSubmit = (event) => {
+                event.preventDefault();
+                console.log('Введенное значение:', inputValue);
+            };
+
+            return (
+                <form onSubmit={handleSubmit}>
+                    <div>
+                        <label>
+                            Введите текст:
+                            <input
+                                type="text"
+                                value={inputValue}
+                                onChange={handleInputChange}
+                                placeholder="Введите что-нибудь..."
+                            />
+                        </label>
+                    </div>
+                    <button type="submit">Отправить</button>
+                </form>
+            );
+        }
+
+        ReactDOM.render(<FormComponent />, document.getElementById('root'));
+    </script>
+</body>
+</html>
